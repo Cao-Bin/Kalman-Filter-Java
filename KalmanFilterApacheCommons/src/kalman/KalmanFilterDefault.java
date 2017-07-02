@@ -15,10 +15,10 @@ import org.apache.commons.math3.linear.RealVector;
  */
 public class KalmanFilterDefault {
 
-    // Position measurement noise (in meters) => 0.5m
-    private final double MEAS_NOISE = 0.1d;
-    // Process noise (in meters) => 0.00001m
-    private final double PROC_NOISE = 1e-5d;
+    // Position measurement noise
+    private final double MEAS_NOISE;
+    // Process noise 
+    private final double PROC_NOISE;
 
     // A - state transition matrix
     private RealMatrix A;
@@ -39,8 +39,13 @@ public class KalmanFilterDefault {
 
     /**
      * Constructs a default (static) Kalman Filter.
+     * @param measurementNoise Measurement error
+     * @param processNoise Process error
      */
-    public KalmanFilterDefault() {
+    public KalmanFilterDefault(double measurementNoise, double processNoise) {
+        // Set noise constants
+        this.MEAS_NOISE = measurementNoise;
+        this.PROC_NOISE = processNoise;
         // A = [ 1 ]
         A = new Array2DRowRealMatrix(new double[]{1d});
         // B = null
@@ -49,7 +54,7 @@ public class KalmanFilterDefault {
         H = new Array2DRowRealMatrix(new double[]{1d});
         // x = [ 0 0 ]
         x = new ArrayRealVector(new double[]{0});
-        // Q = [ 1e-5 ]
+        // Q = [ ? ]
         Q = new Array2DRowRealMatrix(new double[]{this.PROC_NOISE});
         // P = [ 1 ]
         P = new Array2DRowRealMatrix(new double[]{1d});

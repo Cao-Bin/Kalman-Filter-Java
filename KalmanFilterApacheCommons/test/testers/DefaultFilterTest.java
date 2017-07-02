@@ -20,25 +20,30 @@ public class DefaultFilterTest {
         // table names
         String origin = "deca_coordinates";
         String filtered = "deca_coordinates_filtered";
+        // Kalman Filters
+        KalmanFilterDefault xfilter;
+        KalmanFilterDefault yfilter;
+        // Error bounds
+        double measError = 0.1d;
+        double processError = 0.5d;
         // default kalman xfilter
-        KalmanFilterDefault xfilter = new KalmanFilterDefault();
-        KalmanFilterDefault yfilter = new KalmanFilterDefault();
+        xfilter = new KalmanFilterDefault(measError, processError);
+        yfilter = new KalmanFilterDefault(measError, processError);
         // 2d arrays for x and y coordinates
-        double[][] x_points = new double[10000][1];
-        double[][] y_points = new double[10000][1];
+        double[][] x_points = new double[101][1];  // data sample
+        double[][] y_points = new double[101][1];  // data sample
 
         // get data from db
         ResultSet rs = Query.getCoordinates(origin);
         try {
             for (int i = 0; i < x_points.length && rs.next(); i++) {
-                // store and display results
+                // store results
                 x_points[i][0] = rs.getDouble(1);
                 y_points[i][0] = rs.getDouble(2);
-                //System.out.println("X=" + rs.getDouble(1) + ", Y=" + rs.getDouble(2));
                 //use filter and write results to db
-                //x_points[i] = xfilter.estimatePosition(x_points[i]);
-                //y_points[i] = yfilter.estimatePosition(y_points[i]);
-                Query.setCoordinates(filtered, xfilter.estimatePosition(x_points[i])[0], yfilter.estimatePosition(y_points[i])[0]);
+                x_points[i] = xfilter.estimatePosition(x_points[i]);
+                y_points[i] = yfilter.estimatePosition(y_points[i]);
+                Query.setCoordinates(filtered, x_points[i][0], y_points[i][0]);
             }
         } catch (SQLException e) {
             // Tell user if unsuccessful

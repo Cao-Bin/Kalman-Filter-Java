@@ -4,6 +4,7 @@ import connect.DBConnection;
 import connect.Query;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 /**
  * @author Marinus Toman Date: 29-Jun-2017
@@ -19,31 +20,32 @@ public class DBTest {
         // variables
         String table1 = "deca_coordinates";
         //String table2 = "deca_coordinates_filtered";
-//        double x;
-//        double y;
-        
+        double x = 6;
+        double y = 6;
+        double multiplier = 5;
 
-//        // generate random numbers an write to db
-//        Random noGen = new Random();
+        // generate random numbers an write to db
+        Random noGen = new Random();
 //        for(int i = 0; i < 10; i++){
 //            x = noGen.nextGaussian() * 100;
 //            y = noGen.nextGaussian() * 100;
 //            System.out.println("X=" + x + ", Y=" + y);
 //            Query.setCoordinates(table1, x, y);
 //        }
-        for (int i = 1; i <= 9000; i++) {
-//            if (i % 10 == 0) {
-//                x = 5.5;
-//                y = 4.5;
-//            } else if(i % 5 == 0){
-//                x = 6.5;
-//                y = 3;
-//            }else {
-//            x = 6d;
-//            y = 4d;
-//            }
+        for (int i = 1; i <= 500; i++) {
+            if (i % 7 == 0) {
+                x += noGen.nextGaussian() * multiplier;
+            } else if (i % 5 == 0) {
+                y += noGen.nextGaussian() * multiplier;
+            } else if (i % 3 == 0) {
+                x += noGen.nextGaussian() * multiplier;
+                y += noGen.nextGaussian() * multiplier;
+            } else {
+                x -= noGen.nextGaussian() * multiplier;
+                y -= noGen.nextGaussian() * multiplier;
+            }
             //System.out.println("X=" + x + ", Y=" + y);
-            Query.setCoordinates(table1, 6, 4);
+            Query.setCoordinates(table1, x, y);
         }
 //
 //        // read results from db
