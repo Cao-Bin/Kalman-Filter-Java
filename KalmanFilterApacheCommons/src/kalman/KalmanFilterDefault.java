@@ -42,7 +42,7 @@ public class KalmanFilterDefault {
      * @param measurementNoise Measurement error
      * @param processNoise Process error
      */
-    public KalmanFilterDefault(double measurementNoise, double processNoise) {
+    public KalmanFilterDefault(double measurementNoise, double processNoise, double init) {
         // Set noise constants
         this.MEAS_NOISE = measurementNoise;
         this.PROC_NOISE = processNoise;
@@ -52,14 +52,14 @@ public class KalmanFilterDefault {
         B = null;
         // H = [ 1 ]
         H = new Array2DRowRealMatrix(new double[]{1d});
-        // x = [ 0 0 ]
-        x = new ArrayRealVector(new double[]{0});
+        // x = [ 0 ]
+        x = new ArrayRealVector(new double[]{init});
         // Q = [ ? ]
         Q = new Array2DRowRealMatrix(new double[]{this.PROC_NOISE});
         // P = [ 1 ]
         P = new Array2DRowRealMatrix(new double[]{1d});
         //P = null;
-        // R = [ 0.5 ]
+        // R = [ ? ]
         R = new Array2DRowRealMatrix(new double[]{this.MEAS_NOISE});
 
         // Create process model, measurement model and kalman filter
